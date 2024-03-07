@@ -4,7 +4,11 @@
     {
         static void Main(string[] args)
         {
+            string path = @"C:\\Users\\SadCy\\OneDrive\\Рабочий стол\\Новая папка";
+
             
+
+            Router.Run(path);
         }
     }
 }
