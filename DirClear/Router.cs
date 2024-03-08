@@ -12,9 +12,10 @@ namespace DirClear
     {
         static Move move = Mover.MoveFile;
 
-        public static void Run(string path)
+        public static void Run(string currentPath, string configPath)
         {
-            string[] pathes = Directory.GetFiles(path);
+            Mover.SetDictOfPathes(configPath);
+            string[] pathes = Directory.GetFiles(currentPath);
 
             foreach (string s in pathes)
             {

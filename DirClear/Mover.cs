@@ -7,23 +7,55 @@ using System.Threading.Tasks;
 
 namespace DirClear
 {
-    internal abstract class Mover
+    internal class Mover
     {
-        static Dictionary<string, string> ExecToPath = new Dictionary<string, string>()
-        {
-            { "pptx", @"C:\\Users\\SadCy\\OneDrive\\Рабочий стол\\Новая папка (2)" }
-        };
+        static Dictionary<string, string> execToPath = new Dictionary<string, string>();
 
-        public static void MoveFile (string CurrentPath)
+        public static void SetDictOfPathes(string configPath)
         {
-            FileInfo fileInfo = new FileInfo(CurrentPath);
+            using (FileStream fstream = File.OpenRead(configPath))
+            {
+                byte[] buffer = new byte[fstream.Length];
+                fstream.ReadAsync(buffer, 0, buffer.Length);
+                string textFromFile = Encoding.Default.GetString(buffer);
+
+                string[] exec_path = textFromFile.Split('\n');
+
+                foreach (string line in exec_path)
+                {
+                    if (line.Equals(string.Empty)) { break; }
+
+                    string[] splitedLine = line.Split('\t');
+                    string pathInDict = "";
+
+                    for (int i = 1; i < splitedLine.Length; i++)
+                    {
+                        pathInDict += splitedLine[i];
+                    }
+
+                    execToPath[splitedLine[0]] = pathInDict;
+                }
+            }
+        }
+
+        public static void MoveFile (string currentPath)
+        {
+            FileInfo fileInfo = new FileInfo(currentPath);
             string extension = fileInfo.Extension.Trim('.');
 
-            if (!ExecToPath.ContainsKey(extension)) return;
+            if (!execToPath.ContainsKey(extension)) return;
 
-            string targetPath = ExecToPath[extension] + '\\' + fileInfo.Name;
 
-            File.Move(CurrentPath, targetPath);
+            string targetPath = execToPath[extension] + '\\' + fileInfo.Name;
+
+            string b = $"{fileInfo.Name}";
+
+            string c = string.Format("{0}{1}", execToPath[extension], b);
+            Console.WriteLine(c);
+
+            
+            //Console.WriteLine("String" + "\\" + ".txt");
+            //File.Move(CurrentPath, targetPath);
         }
 
     }

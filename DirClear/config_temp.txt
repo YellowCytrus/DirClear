@@ -12,14 +12,14 @@ mp4
 
 ** Docs **
 
-doc						C:\Users\SadCy\OneDrive\Рабочий стол\Новая папка
-docx					C:\Users\SadCy\OneDrive\Рабочий стол\Новая папка
-pdf						C:\Users\SadCy\OneDrive\Рабочий стол\Новая папка
-txt						C:\Users\SadCy\OneDrive\Рабочий стол\Новая папка
+doc						C:\\Users\\SadCy\\OneDrive\\Рабочий стол\\Новая папка (2)
+docx					
+pdf						
+txt						
 
 ** Data Bases **
 
-xls					
+xls						
 xlsx					
 mdb						
 accdb					
