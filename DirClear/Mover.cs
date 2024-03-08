@@ -7,55 +7,44 @@ using System.Threading.Tasks;
 
 namespace DirClear
 {
-    internal class Mover
+    public class Mover
     {
-        static Dictionary<string, string> execToPath = new Dictionary<string, string>();
+        StringBuilder builder = new StringBuilder();
+        public Mover() { }
 
-        public static void SetDictOfPathes(string configPath)
+        public Dictionary<string, string> SetDictOfPathes(string configPath)
         {
-            using (FileStream fstream = File.OpenRead(configPath))
+            Dictionary<string, string> execToPath = new Dictionary<string, string>();
+            string textFromFile = File.ReadAllText(configPath);
+            string[] exec_path = textFromFile.Split('\n');
+
+            foreach (string line in exec_path)
             {
-                byte[] buffer = new byte[fstream.Length];
-                fstream.ReadAsync(buffer, 0, buffer.Length);
-                string textFromFile = Encoding.Default.GetString(buffer);
+                if (line.Equals(string.Empty)) { break; }
 
-                string[] exec_path = textFromFile.Split('\n');
-
-                foreach (string line in exec_path)
-                {
-                    if (line.Equals(string.Empty)) { break; }
-
-                    string[] splitedLine = line.Split('\t');
-                    string pathInDict = "";
-
-                    for (int i = 1; i < splitedLine.Length; i++)
-                    {
-                        pathInDict += splitedLine[i];
-                    }
-
-                    execToPath[splitedLine[0]] = pathInDict;
-                }
+                string[] splitedLine = line.Split('\t');
+                string pathInDict = string.Join(' ', splitedLine.Skip(1)).Trim([' ', '\t']);
+                
+                execToPath[splitedLine[0]] = pathInDict;
             }
+            return execToPath;
         }
 
-        public static void MoveFile (string currentPath)
+        public void MoveFile (string currentPath, Dictionary<string, string> execToPath)
         {
             FileInfo fileInfo = new FileInfo(currentPath);
             string extension = fileInfo.Extension.Trim('.');
 
             if (!execToPath.ContainsKey(extension)) return;
 
+            string path = execToPath[extension].Replace("\r", "");
+            string name = fileInfo.Name;
 
-            string targetPath = execToPath[extension] + '\\' + fileInfo.Name;
+            if (path.Equals(string.Empty) || name.Equals(string.Empty)) return;
 
-            string b = $"{fileInfo.Name}";
+            string targetPath = path + '\\' + name;
 
-            string c = string.Format("{0}{1}", execToPath[extension], b);
-            Console.WriteLine(c);
-
-            
-            //Console.WriteLine("String" + "\\" + ".txt");
-            //File.Move(CurrentPath, targetPath);
+            File.Move(currentPath, targetPath);
         }
 
     }

@@ -9,7 +9,10 @@ namespace DirClear
             string path = @"C:\\Users\\SadCy\\OneDrive\\Рабочий стол\\Новая папка";
             string configPath = @"C:\\Codes\\C#\\Own\\DirClear\\DirClear\\config.txt";
 
-            Router.Run(path, configPath);
+            Mover mover = new Mover();
+            Router router = new Router();
+
+            router.Run(path, configPath, mover);
         }
     }
 }

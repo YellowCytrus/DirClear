@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 
 namespace DirClear
 {
-    public delegate void Move(string s);
-    internal abstract class Router
+    public class Router
     {
-        static Move move = Mover.MoveFile;
+        public Router() { }
 
-        public static void Run(string currentPath, string configPath)
+        public void Run(string currentPath, string configPath, Mover mover)
         {
-            Mover.SetDictOfPathes(configPath);
+            Dictionary<string, string> execToPath = mover.SetDictOfPathes(configPath);
             string[] pathes = Directory.GetFiles(currentPath);
 
             foreach (string s in pathes)
             {
-                move(s);
+                mover.MoveFile(s, execToPath);
             }
         }
     }
