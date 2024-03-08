@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace DirClear
 {
-    public class Mover
+    public abstract class Mover
     {
-        StringBuilder builder = new StringBuilder();
-        public Mover() { }
+        static Dictionary<string, string> execToPath = new Dictionary<string, string>();
 
-        public Dictionary<string, string> SetDictOfPathes(string configPath)
+        static public void SetDictOfPathes(string configPath)
         {
             Dictionary<string, string> execToPath = new Dictionary<string, string>();
             string textFromFile = File.ReadAllText(configPath);
@@ -27,10 +26,9 @@ namespace DirClear
                 
                 execToPath[splitedLine[0]] = pathInDict;
             }
-            return execToPath;
         }
 
-        public void MoveFile (string currentPath, Dictionary<string, string> execToPath)
+        public static void MoveFile (string currentPath)
         {
             FileInfo fileInfo = new FileInfo(currentPath);
             string extension = fileInfo.Extension.Trim('.');
